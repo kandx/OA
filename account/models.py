@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # Create your models here.
 
@@ -10,7 +11,7 @@ class Department(models.Model):
         verbose_name_plural = "处室"
         db_table = "cbd_department"
 
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=10, verbose_name="处室名称")
     create_time = models.DateTimeField(auto_now_add=True) 
 
     def __unicode__(self):
@@ -22,7 +23,7 @@ class Duty(models.Model):
         verbose_name_plural = "职务"
         db_table = "cbd_duty"
 
-    name = models.CharField(max_length=5)
+    name = models.CharField(max_length=5, verbose_name="职务名称")
     create_time = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
@@ -34,7 +35,7 @@ class Level(models.Model):
         verbose_name_plural = "级别"
         db_table = "cbd_level"
 
-    name = models.CharField(max_length=5)
+    name = models.CharField(max_length=5, verbose_name="级别名称")
     create_time = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
@@ -46,7 +47,7 @@ class Character(models.Model):
         verbose_name_plural = "人员性质"
         db_table = "cbd_character"
 
-    name = models.CharField(max_length=5)
+    name = models.CharField(max_length=5,verbose_name="人员类型")
     create_time = models.DateTimeField()
 
     def __unicode__(self):
@@ -68,15 +69,27 @@ class Profile(models.Model):
 		('M', '男'),
 		('F', '女'),
 		)
-	gender = models.CharField(max_length=1, choices=SEX)
-	birthday = models.DateField()
-	enter_date = models.DateField()
-	begin_work_date = models.DateField()
-	user = models.OneToOneField(User)
-	department = models.ForeignKey(Department)
-	duty = models.ForeignKey(Duty)
-	level = models.ForeignKey(Level)
-	character = models.ForeignKey(Character)
+	gender = models.CharField(max_length=1, choices=SEX, verbose_name="性别")
+	birthday = models.DateField(verbose_name="生日")
+	enter_date = models.DateField(verbose_name="进入本单位时间")
+	begin_work_date = models.DateField(verbose_name="开始工作时间")
+	user = models.OneToOneField(User, verbose_name="账号信息")
+	department = models.ForeignKey(Department, verbose_name="部门")
+	duty = models.ForeignKey(Duty, verbose_name="职务")
+	level = models.ForeignKey(Level, verbose_name="级别")
+	character = models.ForeignKey(Character, verbose_name="人员性质")
 
 	def __unicode__(self):
 		return "%s %s" % (self.user.first_name, self.user.last_name)
+
+	def holidays(self):
+		start_work_date = datetime.strptime('%Y-%m-%d', self.begin_work_date)
+		now = datetime.now()
+		years = (now-start_work_date).days()/365
+		if years<10:
+			return 5
+		elif years>=10 and years<15:
+			return 10
+		else:
+			return 15
+
