@@ -82,14 +82,17 @@ class Profile(models.Model):
 	def __unicode__(self):
 		return "%s %s" % (self.user.first_name, self.user.last_name)
 
-	def holidays(self):
-		start_work_date = datetime.strptime('%Y-%m-%d', self.begin_work_date)
+	def _get_holidays(self):
+		start_work_date = datetime.strptime(self.begin_work_date, '%Y-%m-%d')
 		now = datetime.now()
-		years = (now-start_work_date).days()/365
+		timedelta = now-start_work_date
+		years = timedelta.days()/365
 		if years<10:
 			return 5
 		elif years>=10 and years<15:
 			return 10
 		else:
 			return 15
+	holidays = property(_get_holidays)
+	
 
