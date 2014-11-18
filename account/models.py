@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Deaprtment(models.Model):
+class Department(models.Model):
     class Meta:
         verbose_name = "处室"
         verbose_name_plural = "处室"
-        dt_table = "cbd_department"
+        db_table = "cbd_department"
 
     name = models.CharField(max_length=10)
     create_time = models.DateTimeField(auto_now_add=True) 
