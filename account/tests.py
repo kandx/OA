@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class ProfileMethodTest(TestCase):
 	
 	def setUp(self):
-		user = User.objects.get(email__contains="kandx")
+		user = User.objects.create_user(username='zengk', password="1", email="zengk@thnet.gov.cn")
 		depart = Department.objects.create(name="建设开发处")
 		duty = Duty.objects.create(name="副处长")
 		level = Level.objects.create(name="副主任科员")
