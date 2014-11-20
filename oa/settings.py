@@ -29,7 +29,9 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+APPEND_SLASH = True
 
+LOGIN_REDIRECT_URL = 'index'
 # Application definition
 
 INSTALLED_APPS = (
